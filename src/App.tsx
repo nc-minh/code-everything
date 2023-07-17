@@ -1,59 +1,60 @@
-'./main.css';
-import { useCallback, useState } from 'react';
-import Header from './components/Header';
-import One from './components/One';
-import Zero from './components/Zero';
+import { useRef, useState } from "react";
+import { Form } from "./containers/Form";
+import { Header } from "./containers/Header";
+import { Step } from "./containers/Step";
+import "./main.css";
+
+let action = "";
 
 function App() {
-  const [view, setView] = useState(0);
-  const [zeroSubmit, setZeroSubmit] = useState(false);
-  const [oneSubmit, setOneSubmit] = useState(false);
-  const [submit, setSubmit] = useState(false);
+  const buttonRef = useRef();
+  const formRef = useRef();
 
-  const handleOnClick1 = useCallback(() => {
-    setView(1);
-  }, []);
-
-  const handleOnClick0 = useCallback(() => {
-    setView(0);
-  }, []);
-
-  const handleOnsubmit = useCallback(() => {
-    setSubmit(true);
-    console.log(zeroSubmit, oneSubmit);
-
-    if (oneSubmit && zeroSubmit) {
-      alert('Submit success!');
-    } else {
-      alert('Vui lòng nhập đủ thông tin!');
+  const handleSubmit = (data) => {
+    if (action === "submit") {
+      if (data) {
+        alert("Thành công");
+      } else {
+        alert("Vui lòng điền đủ thông tin");
+      }
+      action = "";
     }
-  }, [zeroSubmit, oneSubmit]);
+  };
 
-  const handleOnOk = useCallback((status: boolean) => {
-    if (status) {
-      console.log('ok', status);
-      setZeroSubmit(status);
+  const validate = (values) => {
+    const errors = {};
+
+    if (values?.templateType === "0") {
+      errors.templateType = "Error";
     }
-  }, []);
 
-  const handleonSubmitOk = useCallback((status: boolean) => {
-    if (status) {
-      console.log('submit ok', status);
-
-      setOneSubmit(status);
-    }
-  }, []);
+    const regex = /^(name|title|email|id|username)/i;
+    Object.keys(values).forEach((key) => {
+      if (regex.test(key)) {
+        if (!values?.[key]) {
+          errors[key] = "Error";
+        }
+      }
+    });
+    return errors;
+  };
 
   return (
-    <div>
+    <div className="container">
       <Header
-        view={view}
-        onClick1={handleOnClick1}
-        onClick0={handleOnClick0}
-        onSubmit={handleOnsubmit}
+        onSubmit={() => {
+          action = "submit";
+          buttonRef?.current.click?.();
+        }}
       />
-      <Zero view={view} onOk={handleOnOk} />
-      <One view={view} onSubmitOk={handleonSubmitOk} submit={submit} />
+      <Form onSubmit={handleSubmit} validate={validate}>
+        {({ errors, handleSubmitForm }) => (
+          <form className="form" onSubmit={handleSubmitForm} ref={formRef}>
+            <Step errors={errors} formRef={formRef} />
+            <button hidden={true} ref={buttonRef}></button>
+          </form>
+        )}
+      </Form>
     </div>
   );
 }

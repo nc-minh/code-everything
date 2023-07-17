@@ -1,0 +1,56 @@
+* {
+  font-size: 15px;
+}
+
+.container {
+  width: 400px;
+  height: 100%;
+  background-color: #fff;
+  margin: 0 auto;
+}
+
+.header {
+  display: flex;
+  justify-content: flex-end;
+  padding: 20px;
+  border-bottom: 1px solid;
+}
+
+.form {
+  padding: 20px;
+}
+
+.label {
+  width: 70px;
+  display: inline-block;
+  margin-bottom: 15px;
+}
+
+.step-active {
+  color: red;
+}
+.pb-20 {
+  padding-bottom: 20px;
+}
+
+.pr-20 {
+  padding-right: 20px;
+}
+
+.py-15 {
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+.displayed {
+  display: block;
+}
+
+.none {
+  display: none;
+}
+
+.red {
+  color: red;
+  margin-left: 10px;
+}
